@@ -4,6 +4,7 @@ chrome.runtime.onInstalled.addListener(() => {
     blackListMode: [0, 1, 2],
     enableFlag: false,
     dayEndTimer: "12:00",
+    dateStamp: new Date(),
     dailyDuration: 0
   };
   chrome.storage.sync.set({ ...initParam });

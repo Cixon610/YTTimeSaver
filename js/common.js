@@ -4,7 +4,8 @@ const serviceParams = Object.freeze({
   blackListMode: 2,
   enableFlag: 3,
   dayEndTimer: 4,
-  dailyDuration: 5,
+  dateStamp: 5,
+  dailyDuration: 6,
 });
 
 function isTimeOverHHMM(stringValue) {

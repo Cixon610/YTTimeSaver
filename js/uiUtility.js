@@ -1,13 +1,31 @@
 let blockPanel = {
   element: document.querySelector("#dwmtBlock"),
-  Toggle: () => {
+  //True: open, False: close, undefined: toggle
+  Toggle: (status) => {
     try {
       let el = blockPanel.element;
-      if (!!el) {
-        el.style.display == "block" ? (el.style.display = "none") : (el.style.display = "block");
-      } else {
-        el = createElementWithAttributes("div", { id: "dwmtBlock" });
-        !!el && (blockPanel.element = el) && document.body.appendChild(el);
+      let isPanelShowed = !!el && (el.style.display == "block" || el.style.display == "");
+      switch (status) {
+        case true:
+          applyToUI(true);
+          break;
+        case false:
+          applyToUI(false);
+          break;
+        default:
+          applyToUI(!isPanelShowed);
+          break;
+      }
+      function applyToUI(status) {
+        if (!status) {
+          isPanelShowed && (el.style.display = "none");
+          return;
+        }
+
+        !!el
+          ? (el.style.display = "block")
+          : //first render
+            document.body.appendChild((blockPanel.element = createElementWithAttributes("div", { id: "dwmtBlock" })));
       }
       return true;
     } catch (error) {
@@ -20,19 +38,18 @@ let blockPanel = {
 
 let durationPanel = {
   element: document.querySelector("#dwmtDuration"),
-  hasRemainingTime: (dailyDuration, dailyLimitedHour) =>{
-    return (dailyLimitedHour * 3600 - dailyDuration) >= 0;
+  hasRemainingTime: (dailyDuration, dailyLimitedHour) => {
+    return dailyLimitedHour * 3600 - dailyDuration >= 0;
   },
   Update: (dailyDuration, dailyLimitedHour) => {
     let remainingTime = durationToHHMMSS(dailyLimitedHour * 3600 - dailyDuration);
     let el = durationPanel.element;
-    if(!!el){
+    if (!!el) {
       el.innerText = remainingTime;
-    }
-    else{
+    } else {
       let target = document.querySelector("#search-input");
       el = createElementWithAttributes("div", { id: "dwmtDuration", innerText: remainingTime });
-      !!el && (durationPanel.element = el) && target?.parentNode.insertBefore(el,target.nextSibling);
+      !!el && (durationPanel.element = el) && target?.parentNode.insertBefore(el, target.nextSibling);
     }
   },
 };
@@ -62,4 +79,18 @@ function injectAlertPanel() {
       clearInterval(setAlertPanel);
     }
   }, 500);
+}
+
+//播放時tooltip會顯示暫停
+function isPlaying() {
+  const playKey = ["暫停", "pause"];
+  let playButtonTitle = document.querySelector(".ytp-play-button.ytp-button")?.title;
+  let tooltipContent = document.querySelector(".ytp-tooltip-text.ytp-tooltip-text-no-title")?.innerText;
+
+  if (!playButtonTitle) return false;
+
+  playButtonTitle = playButtonTitle.split(" ")[0];
+  tooltipContent = tooltipContent?.split(" ")[0];
+
+  return playKey.includes(playButtonTitle) || playKey.includes(tooltipContent);
 }
