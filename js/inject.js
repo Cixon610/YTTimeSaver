@@ -5,8 +5,7 @@ window.onload = () => {
     let seconds = setInterval(() => {
       getServiceParams(
         [serviceParams.All],
-        ({ dailyLimitedHour, blackListMode, enableFlag, dayEndTimer, dailyDuration }) => {
-          //Disable時移除blockPanel
+        ({ dailyLimitedHour, filterValues, enableFlag, dayEndTimer, dailyDuration }) => {
           if (enableFlag) {
             let toBlock = false;
             //Update remainingTime
@@ -30,6 +29,6 @@ window.onload = () => {
           }
         }
       );
-    }, 1000);
+    }, 500);
   })();
 };

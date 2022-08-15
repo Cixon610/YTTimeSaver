@@ -1,15 +1,36 @@
+//#region Parameter
 let dlhElement = document.querySelector("[name='dailyLimitedHour']");
-let filterElement = [...document.querySelectorAll("#filterContainer input")];
+let filters = [...document.querySelectorAll("#filterContainer input")];
+let filterElements = {
+  All: filters,
+  BlackFlag: filters.filter((x) => x.value == "b")[0],
+  BlackDetails: filters.filter((x) => x.value.includes("b") && x.value !== "b"),
+  WhiteFlag: filters.filter((x) => x.value == "w")[0],
+  WhiteDetails: filters.filter((x) => x.value.includes("w") && x.value !== "w"),
+};
+let filtersCache = [];
 let switchElement = document.querySelector("#title input");
 let dayEndTimerElement = document.querySelector("[name='dayEndTimer']");
+//#endregion
+
+//#region function
+function updateMainFilterStatus(mainEle, detailEles) {
+  detailEles.some((x) => x.checked) ? (mainEle.checked = true) : (mainEle.checked = false);
+}
+function updateFilters() {
+  filtersCache = filterElements.All.filter((x) => x.checked).map((x) => x.value);
+  chrome.storage.sync.set({ filterValues: filtersCache });
+}
+//#endregion
+
 //#region init param
 // getServiceParams(
 //   [serviceParams.All],
-//   ({ dailyLimitedHour, blackListMode, enableFlag, dayEndTimer }) => {
-//     console.log(dailyLimitedHour, blackListMode, enableFlag, dayEndTimer);
+//   ({ dailyLimitedHour, filterValues, enableFlag, dayEndTimer }) => {
+//     console.log(dailyLimitedHour, filterValues, enableFlag, dayEndTimer);
 //     dlhElement.value = dailyLimitedHour;
-//     filterElement
-//       .filter((x) => blackListMode?.includes(+x.value))
+//     filterElements
+//       .filter((x) => filterValues?.includes(+x.value))
 //       .forEach((x) => {
 //         x.checked = true;
 //       });
@@ -18,15 +39,14 @@ let dayEndTimerElement = document.querySelector("[name='dayEndTimer']");
 //   }
 // );
 chrome.storage.sync.get(
-  ["dailyLimitedHour", "blackListMode", "enableFlag", "dayEndTimer"],
-  ({ dailyLimitedHour, blackListMode, enableFlag, dayEndTimer }) => {
-    console.log(dailyLimitedHour, blackListMode, enableFlag, dayEndTimer);
+  ["dailyLimitedHour", "filterValues", "enableFlag", "dayEndTimer"],
+  ({ dailyLimitedHour, filterValues, enableFlag, dayEndTimer }) => {
+    console.log(dailyLimitedHour, filterValues, enableFlag, dayEndTimer);
     dlhElement.value = dailyLimitedHour;
-    filterElement
-      .filter((x) => blackListMode?.includes(+x.value))
-      .forEach((x) => {
-        x.checked = true;
-      });
+    filterElements.All.filter((x) => filterValues?.includes(x.value)).forEach((x) => {
+      x.checked = true;
+    });
+    filtersCache = filterValues;
     switchElement.checked = enableFlag;
     dayEndTimerElement.value = dayEndTimer;
   }
@@ -50,36 +70,29 @@ dayEndTimerElement.addEventListener("blur", async () => {
   console.log(dayEndTimerElement.value);
   chrome.storage.sync.set({ dayEndTimer: dayEndTimerElement.value });
 });
-//filter
-// filterElement.addEventListener("click",()=>{
-//   console.log()
-// })
-
+//filters
+filterElements.All.forEach((element) => {
+  element.addEventListener("click", (e) => {
+    if (e.currentTarget != filterElements.BlackFlag && e.currentTarget != filterElements.WhiteFlag) {
+      updateMainFilterStatus(filterElements.BlackFlag, filterElements.BlackDetails);
+      updateMainFilterStatus(filterElements.WhiteFlag, filterElements.WhiteDetails);
+    }
+    updateFilters();
+  });
+});
+[filterElements.BlackFlag, filterElements.WhiteFlag].forEach((element) => {
+  element.addEventListener("click", (e) => {
+    let checked = e.currentTarget.checked;
+    e.currentTarget == filterElements.BlackFlag
+      ? filterElements.BlackDetails.forEach((x) => (x.checked = checked))
+      : filterElements.WhiteDetails.forEach((x) => (x.checked = checked));
+    filtersCache = filterElements.All.map((x) => x.value);
+    updateFilters();
+  });
+});
 //enable switch
 switchElement.addEventListener("change", (e) => {
   console.log("e.currentTarget.checked", e.currentTarget.checked);
   chrome.storage.sync.set({ enableFlag: e.currentTarget.checked });
 });
-
-// chrome.storage.sync.get("",({}) => {
-
-// });
 //#endregion
-
-// When the button is clicked, inject setPageBackgroundColor into current page
-// changeColor.addEventListener("click", async () => {
-//   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-//   chrome.scripting.executeScript({
-//     target: { tabId: tab.id },
-//     function: setPageBackgroundColor,
-//   });
-// });
-
-// // The body of this function will be execuetd as a content script inside the
-// // current page
-// function setPageBackgroundColor() {
-//   chrome.storage.sync.get("color", ({ color }) => {
-//     document.body.style.backgroundColor = color;
-//   });
-// }

@@ -18,7 +18,7 @@ let blockPanel = {
       }
       function applyToUI(status) {
         if (!status) {
-          isPanelShowed && (el.style.display = "none");
+          isPanelShowed && (el.style.display = "none") && blockPanel.RemoveScript();
           return;
         }
 
@@ -26,6 +26,7 @@ let blockPanel = {
           ? (el.style.display = "block")
           : //first render
             document.body.appendChild((blockPanel.element = createElementWithAttributes("div", { id: "dwmtBlock" })));
+        blockPanel.AppendScript();
       }
       return true;
     } catch (error) {
@@ -34,6 +35,20 @@ let blockPanel = {
     }
   },
   IsShow: () => ["", "block"].includes(blockPanel.element?.style.display),
+  AppendScript: () => {
+    let frame = createElementWithAttributes("iframe", {
+      id: "dwmtBlockFrame",
+      width: "100%",
+      height: "100%",
+      src: "https://www.youtube.com/embed/HfNR_cpfLGw?controls=0&start=11&autoplay=1",
+    });
+    blockPanel.element.appendChild(frame);
+    //改成call yt api preload video
+  },
+  RemoveScript: () => {
+    let frame = document.querySelector("#dwmtBlockFrame");
+    frame.remove();
+  }
 };
 
 let durationPanel = {

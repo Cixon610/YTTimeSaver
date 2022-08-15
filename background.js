@@ -1,9 +1,9 @@
 chrome.runtime.onInstalled.addListener(() => {
   let initParam = {
     dailyLimitedHour: 1,
-    blackListMode: [0, 1, 2],
+    filterValues: [],
     enableFlag: false,
-    dayEndTimer: "12:00",
+    dayEndTimer: "23:59:59",
     dateStamp: new Date(),
     dailyDuration: 0
   };

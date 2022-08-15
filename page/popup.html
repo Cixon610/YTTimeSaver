@@ -5,44 +5,63 @@
     <script src="../js/common.js"></script>
   </head>
   <body>
-      <div id="title">
-        <p>YTTimeSaver</p>
-        <label class="switch">
-          <input type="checkbox" checked />
-          <span class="slider round"></span>
-        </label>
-      </div>
+    <div id="title">
+      <p>YTTimeSaver</p>
+      <label class="switch">
+        <input type="checkbox"/>
+        <span class="slider round"></span>
+      </label>
+    </div>
     <div id="tsContainer">
       <div id="TimerContainer">
         <label for="dailyLimitedHour">Daily Limit (hr)</label>
         <input type="number" min="0" max="24" name="dailyLimitedHour" placeholder="hour" />
         <label for="dayEndTimer">Day End</label>
-        <input type="time" name="dayEndTimer"/>
+        <input type="time" name="dayEndTimer" step="1" />
       </div>
 
       <div id="filterContainer">
-        <p>BlackListMode</p>
-        <span>
-          <input type="checkbox" name="blockFilter" id="blockFilter_All" value="0" />
-          <label for="blockFilter_All" class="disable-select">All</label>
-        </span>
-        <span>
-          <input type="checkbox" name="blockFilter" id="blockFilter_ByTitleKey" value="1" />
-          <label for="blockFilter_ByTitleKey" class="disable-select">ByTitleKey</label>
-          <select size="5" multiple="mutiple">
-            <option value="Merceders"> Merceders </option>  
-            <option value="BMW"> BMW </option>  
-            <option value="Jaguar"> Jaguar </option>  
-            <option value="Lamborghini"> Lamborghini </option>  
-            <option value="Ferrari"> Ferrari </option>  
-            <option value="Ford"> Ford </option>  
-          </select>
-          <input type="text" name="" id="">
-        </span>
-        <span>
-          <input type="checkbox" name="blockFilter" id="blockFilter_ByChannel" value="2" />
-          <label for="blockFilter_ByChannel" class="disable-select">ByChannel</label>
-        </span>
+        <p>Filters</p>
+        <div id="Filter_Detail">
+          <div>
+            <input type="checkbox" name="Filter_BlackList" id="Filter_BlackList" value="b" />
+            <label for="Filter_BlackList" class="disable-select">BlackList</label>
+          </div>
+          <div>
+            <div>
+              <input type="checkbox" name="BFilter_Title" id="BFilter_Title" value="b0" />
+              <label for="BFilter_Title" class="disable-select">ByTitle</label>
+            </div>
+            <div>
+              <input type="checkbox" name="BFilter_Channel" id="BFilter_Channel" value="b1" />
+              <label for="BFilter_Channel" class="disable-select">ByChannel</label>
+            </div>
+            <div>
+              <input type="checkbox" name="BFilter_Description" id="BFilter_Description" value="b2" />
+              <label for="BFilter_Description" class="disable-select">ByDescription</label>
+            </div>
+          </div>
+        </div>
+        <div id="Filter_Detail">
+          <div>
+            <input type="checkbox" name="Filter_WhiteList" id="Filter_WhiteList" value="w" />
+            <label for="Filter_WhiteList" class="disable-select">WhiteList</label>
+          </div>
+          <div>
+            <div>
+              <input type="checkbox" name="WFilter_Title" id="WFilter_Title" value="w0" />
+              <label for="WFilter_Title" class="disable-select">ByTitle</label>
+            </div>
+            <div>
+              <input type="checkbox" name="WFilter_Channel" id="WFilter_Channel" value="w1" />
+              <label for="WFilter_Channel" class="disable-select">ByChannel</label>
+            </div>
+            <div>
+              <input type="checkbox" name="WFilter_Description" id="WFilter_Description" value="w2" />
+              <label for="WFilter_Description" class="disable-select">ByDescription</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script src="../js/popup.js"></script>

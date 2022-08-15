@@ -1,6 +1,7 @@
 body {
   margin: 0px;
   padding: 0px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #tsContainer {
@@ -22,14 +23,38 @@ body {
 
 #TimerContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 40% 60%;
   grid-gap: 3px;
-  padding: 5% 5%;
+  margin: 5% 5%;
 }
 
 #filterContainer {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 30px 1fr 1fr;
+  grid-gap: 3px;
+  margin: 0% 0% 5% 5%;
+}
+
+#filterContainer > p {
+  font-size: medium;
+  font-weight: bolder;
+}
+
+#Filter_Detail {
+  display: grid;
+  grid-template-rows: 25px 1fr;
+  grid-gap: 5px;
+  margin: 0% 10%;
+}
+
+#Filter_Detail > div:first-child {
+  border-left: solid rgb(82, 98, 110) 10px;
+  box-shadow: 2px 2px 2px 2px grey;
+}
+
+#Filter_Detail > div:not(:first-child) {
+  padding: 0% 3% 3% 3%;
+  margin: 0px 0px 0px 20px;
 }
 
 label,

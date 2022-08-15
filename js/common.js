@@ -1,7 +1,7 @@
 const serviceParams = Object.freeze({
   All: 0,
   dailyLimitedHour: 1,
-  blackListMode: 2,
+  filterValues: 2,
   enableFlag: 3,
   dayEndTimer: 4,
   dateStamp: 5,
