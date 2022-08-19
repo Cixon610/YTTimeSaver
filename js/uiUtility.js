@@ -4,7 +4,7 @@ let blockPanel = {
   Toggle: (status) => {
     try {
       let el = blockPanel.element;
-      let isPanelShowed = !!el && (el.style.display == "block" || el.style.display == "");
+      let isPanelShowed = blockPanel.IsShow();
       switch (status) {
         case true:
           applyToUI(true);
@@ -25,7 +25,9 @@ let blockPanel = {
         !!el
           ? (el.style.display = "block")
           : //first render
-            document.body.appendChild((blockPanel.element = createElementWithAttributes("div", { id: "dwmtBlock" })));
+            document.body.appendChild(
+              (blockPanel.element = commonElement.createElementWithAttributes("div", { id: "dwmtBlock" }))
+            );
         blockPanel.AppendScript();
       }
       return true;
@@ -34,13 +36,13 @@ let blockPanel = {
       return false;
     }
   },
-  IsShow: () => ["", "block"].includes(blockPanel.element?.style.display),
+  IsShow: () => commonElement.isPanelShow(blockPanel),
   AppendScript: () => {
-    let frame = createElementWithAttributes("iframe", {
+    let frame = commonElement.createElementWithAttributes("iframe", {
       id: "dwmtBlockFrame",
       width: "100%",
       height: "100%",
-      src: "https://www.youtube.com/embed/HfNR_cpfLGw?controls=0&start=11&autoplay=1",
+      src: "https://www.youtube.com/embed/NOZONW-UK0w?controls=0&start=27&autoplay=1",
     });
     blockPanel.element.appendChild(frame);
     //改成call yt api preload video
@@ -48,7 +50,7 @@ let blockPanel = {
   RemoveScript: () => {
     let frame = document.querySelector("#dwmtBlockFrame");
     frame.remove();
-  }
+  },
 };
 
 let durationPanel = {
@@ -56,45 +58,55 @@ let durationPanel = {
   hasRemainingTime: (dailyDuration, dailyLimitedHour) => {
     return dailyLimitedHour * 3600 - dailyDuration >= 0;
   },
-  Update: (dailyDuration, dailyLimitedHour) => {
-    let remainingTime = durationToHHMMSS(dailyLimitedHour * 3600 - dailyDuration);
+  isShow: () => commonElement.isPanelShow(durationPanel),
+  hide: () => durationPanel.isShow() && (durationPanel.element.style.display = "none"),
+  update: (dailyDuration, dailyLimitedHour) => {
     let el = durationPanel.element;
+    //Only update by second, if duration is float, don't update.
+    if (dailyDuration % 1 !== 0) return;
+    let remainingTime = durationToHHMMSS(dailyLimitedHour * 3600 - dailyDuration);
     if (!!el) {
+      el.style.display = "block";
       el.innerText = remainingTime;
     } else {
       let target = document.querySelector("#search-input");
-      el = createElementWithAttributes("div", { id: "dwmtDuration", innerText: remainingTime });
+      el = commonElement.createElementWithAttributes("div", { id: "dwmtDuration", innerText: remainingTime });
       !!el && (durationPanel.element = el) && target?.parentNode.insertBefore(el, target.nextSibling);
     }
   },
 };
 
-function createElementWithAttributes(elementName, attributeObj) {
-  try {
-    let newDiv = document.createElement(elementName);
-    Object.entries(attributeObj).forEach((x) => {
-      newDiv[x[0]] = x[1];
-    });
-    return newDiv;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-function injectAlertPanel() {
-  let infoDiv = null;
-
-  let setAlertPanel = setInterval(() => {
-    console.log("settimeout is processing...");
-    infoDiv = document.querySelector("#primary-inner");
-    if (!!infoDiv) {
-      let text = createElementWithAttributes("div", { id: "dwmtDiv", innerText: "廢片" });
-      infoDiv.prepend(text);
-      clearInterval(setAlertPanel);
+let commonElement = {
+  isPanelShow: (panel) => {
+    return ["", "block"].includes(panel.element?.style.display);
+  },
+  createElementWithAttributes: (elementName, attributeObj) => {
+    try {
+      let newDiv = document.createElement(elementName);
+      Object.entries(attributeObj).forEach((x) => {
+        newDiv[x[0]] = x[1];
+      });
+      return newDiv;
+    } catch (error) {
+      console.error(error);
+      return null;
     }
-  }, 500);
-}
+  },
+
+  injectAlertPanel: () => {
+    let infoDiv = null;
+
+    let setAlertPanel = setInterval(() => {
+      console.log("settimeout is processing...");
+      infoDiv = document.querySelector("#primary-inner");
+      if (!!infoDiv) {
+        let text = commonElement.createElementWithAttributes("div", { id: "dwmtDiv", innerText: "廢片" });
+        infoDiv.prepend(text);
+        clearInterval(setAlertPanel);
+      }
+    }, 500);
+  },
+};
 
 //播放時tooltip會顯示暫停
 function isPlaying() {

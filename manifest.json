@@ -6,7 +6,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "tabs", "scripting"],
   "action": {
     "default_popup": "/page/popup.html",
     "default_icon": {
@@ -27,7 +27,7 @@
     {
       "matches": ["https://www.youtube.com/*"],
       "css": ["/css/inject.css"],
-      "js": ["/js/inject.js","/js/common.js","/js/uiUtility.js"]
+      "js": ["/js/inject.js", "/js/common.js", "/js/uiUtility.js"]
     }
   ]
 }

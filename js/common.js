@@ -6,6 +6,7 @@ const serviceParams = Object.freeze({
   dayEndTimer: 4,
   dateStamp: 5,
   dailyDuration: 6,
+  activeTabInfo: 7
 });
 
 function isTimeOverHHMM(stringValue) {

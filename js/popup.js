@@ -24,20 +24,6 @@ function updateFilters() {
 //#endregion
 
 //#region init param
-// getServiceParams(
-//   [serviceParams.All],
-//   ({ dailyLimitedHour, filterValues, enableFlag, dayEndTimer }) => {
-//     console.log(dailyLimitedHour, filterValues, enableFlag, dayEndTimer);
-//     dlhElement.value = dailyLimitedHour;
-//     filterElements
-//       .filter((x) => filterValues?.includes(+x.value))
-//       .forEach((x) => {
-//         x.checked = true;
-//       });
-//     switchElement.checked = enableFlag;
-//     dayEndTimerElement.value = dayEndTimer;
-//   }
-// );
 chrome.storage.sync.get(
   ["dailyLimitedHour", "filterValues", "enableFlag", "dayEndTimer"],
   ({ dailyLimitedHour, filterValues, enableFlag, dayEndTimer }) => {
